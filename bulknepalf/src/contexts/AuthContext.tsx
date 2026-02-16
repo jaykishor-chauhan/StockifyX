@@ -35,6 +35,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   /*** Utility function to convert raw API response items into LiveTickerItem format. */
   const toTickerItem = (item: any): LiveTickerItem => {
+    const ltp = toFiniteNumber(item?.lastTradedPrice ?? item?.ltp ?? item?.currentValue);
+    const change = toFiniteNumber(item?.change);
+
+    const providedChangePercent =
+      item?.changePercent ??
+      item?.percentageChange ??
+      item?.percentChange ?? 0
+
     return {
       name:
         typeof item?.name === "string" && item.name.length > 0
@@ -42,10 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             ? (typeof item?.symbol === "string" ? item.symbol : item.name)
             : item.name
           : (typeof item?.symbol === "string" ? item.symbol : ""),
+      securityName: typeof item?.securityName === "string" ? item.securityName : item?.name,
+      iconUrl: item?.iconUrl ?? item?.icon ?? "",
       sector: typeof item?.sector === "string" ? item.sector : "",
-      ltp: toFiniteNumber(item?.change),
-      change: toFiniteNumber(item?.change),
-      changePercent: toFiniteNumber(item?.changePercent),
+      ltp,
+      change,
+      changePercent: providedChangePercent,
     };
   };
   const mapTickers = (value: unknown): LiveTickerItem[] => {

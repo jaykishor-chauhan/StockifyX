@@ -22,6 +22,8 @@ export type MarketSummary = MarketSummaryItem[];
 
 export interface LiveTickerItem {
   name: string;
+  securityName: string;
+  iconUrl?: string;
   sector: string;
   ltp: number;
   change: number;
@@ -113,6 +115,17 @@ export interface ListedCompany {
   totalTransactions: number;
   lastUpdatedDateTime: string;
 }
+
+
+// export interface WatchListItem {
+//   symbol: string;
+//   name: string;
+//   lpt: number;
+//   change: number;
+//   changePercent: number;
+//   exchange: string;
+//   type: string;
+// }
 
 // Back-compat with the previous misspelled type name.
 export type ListdCompany = ListedCompany;
