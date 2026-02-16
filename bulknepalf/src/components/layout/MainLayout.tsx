@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { LeftSidebar } from './LeftSidebar';
+import { SidePannel } from './SidePannel';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function MainLayout() {
@@ -29,7 +29,7 @@ export function MainLayout() {
 
         <div className="flex h-screen overflow-hidden">
           <div className="fixed left-15 top-15 h-screen w-[500px]">
-            <LeftSidebar />
+            <SidePannel />
           </div>
           <main className="flex-1 overflow-y-auto h-screen lg:ml-80 xl:ml-96 2xl:ml-[400px]">
             <Outlet />
