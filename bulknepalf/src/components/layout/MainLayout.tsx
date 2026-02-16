@@ -16,7 +16,7 @@ export function MainLayout() {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         isCollapsed={false}
-        onToggleCollapse={() => {}}
+        onToggleCollapse={() => { }}
       />
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -27,12 +27,15 @@ export function MainLayout() {
           primaryIndex={primaryIndex}
         />
 
-        <div className="flex flex-1 overflow-hidden">
-          <LeftSidebar />
-          <main className="flex-1 overflow-y-auto">
+        <div className="flex h-screen overflow-hidden">
+          <div className="fixed left-15 top-15 h-screen w-[500px]">
+            <LeftSidebar />
+          </div>
+          <main className="flex-1 overflow-y-auto h-screen lg:ml-80 xl:ml-96 2xl:ml-[400px]">
             <Outlet />
           </main>
         </div>
+
       </div>
     </div>
   );

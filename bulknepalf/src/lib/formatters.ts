@@ -7,23 +7,32 @@ export function formatNumber(num: number, decimals: number = 2): string {
   });
 }
 
-export function formatCompactNumber(num: number): string {
-  if (num >= 1e12) {
-    return (num / 1e12).toFixed(2) + ' Kha';
+export function formatCompactNumber(num: unknown, decimals: number = 2): string {
+  if (num === null || num === undefined) return "-";
+  if (typeof num === "string" && num.trim().length === 0) return "-";
+
+  const n = typeof num === "number" ? num : Number(num);
+  if (!Number.isFinite(n)) return "-";
+
+  const sign = n < 0 ? "-" : "";
+  const abs = Math.abs(n);
+
+  let formatted: string;
+  if (abs >= 1e12) {
+    formatted = (abs / 1e12).toFixed(decimals) + " Kha";
+  } else if (abs >= 1e9) {
+    formatted = (abs / 1e9).toFixed(decimals) + " Ar";
+  } else if (abs >= 1e7) {
+    formatted = (abs / 1e7).toFixed(decimals) + " Cr";
+  } else if (abs >= 1e5) {
+    formatted = (abs / 1e5).toFixed(decimals) + " L";
+  } else if (abs >= 1e3) {
+    formatted = (abs / 1e3).toFixed(decimals) + " K";
+  } else {
+    formatted = abs.toFixed(decimals);
   }
-  if (num >= 1e9) {
-    return (num / 1e9).toFixed(2) + ' Ar';
-  }
-  if (num >= 1e7) {
-    return (num / 1e7).toFixed(2) + ' Cr';
-  }
-  if (num >= 1e5) {
-    return (num / 1e5).toFixed(2) + ' L';
-  }
-  if (num >= 1e3) {
-    return (num / 1e3).toFixed(2) + ' K';
-  }
-  return num.toFixed(2);
+
+  return sign ? `${sign}${formatted}` : formatted;
 }
 
 export function formatCurrency(num: number): string {

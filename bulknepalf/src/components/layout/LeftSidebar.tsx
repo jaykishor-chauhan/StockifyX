@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface WatchlistItem {
   symbol: string;
+  name?: string;
   price: number;
   change: number;
   changePercent: number;
@@ -33,11 +34,11 @@ const watchlistOptions: WatchlistOption[] = [
 ];
 
 const watchlistItems: WatchlistItem[] = [
-  { symbol: 'NHPC', price: 215.80, change: 8.80, changePercent: 4.25, exchange: 'NSE', type: 'ES' },
-  { symbol: 'STC', price: 5527, change: -24, changePercent: -0.43, exchange: 'NSE', type: 'ES' },
-  { symbol: 'TRH', price: 764, change: 3.80, changePercent: 0.50, exchange: 'NSE', type: 'ES' },
-  { symbol: 'NABIL', price: 1280, change: 15, changePercent: 1.19, exchange: 'NSE', type: 'ES' },
-  { symbol: 'SCB', price: 850, change: -5, changePercent: -0.58, exchange: 'NSE', type: 'ES' },
+  { symbol: 'NHPC', name: 'NHPC Limited', price: 215.8, change: 8.8, changePercent: 4.25, exchange: 'NSE', type: 'ES' },
+  { symbol: 'STC', name: 'State Telecom', price: 5527, change: -24, changePercent: -0.43, exchange: 'NSE', type: 'ES' },
+  { symbol: 'TRH', name: 'Tribhuwan Hydro', price: 764, change: 3.8, changePercent: 0.5, exchange: 'NSE', type: 'ES' },
+  { symbol: 'NABIL', name: 'Nabil Bank', price: 1280, change: 15, changePercent: 1.19, exchange: 'NSE', type: 'ES' },
+  { symbol: 'SCB', name: 'Standard Chartered', price: 850, change: -5, changePercent: -0.58, exchange: 'NSE', type: 'ES' },
 ];
 
 const recentSearches = [
@@ -56,7 +57,6 @@ const fastSelectFilters = ['Indices', 'Opt. Chain', 'Top Picks'];
 export function LeftSidebar() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('1');
-  const [collapsed, setCollapsed] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [watchlistOpen, setWatchlistOpen] = useState(false);
@@ -86,8 +86,8 @@ export function LeftSidebar() {
       : true;
     const matchesFilter = activeFilter
       ? (activeFilter === 'Indices' && item.type === 'INDEX') ||
-        (activeFilter === 'Opt. Chain' && item.name.toLowerCase().includes('option')) ||
-        (activeFilter === 'Top Picks' && item.type === 'ES')
+      (activeFilter === 'Opt. Chain' && item.name.toLowerCase().includes('option')) ||
+      (activeFilter === 'Top Picks' && item.type === 'ES')
       : true;
     return matchesQuery && matchesFilter;
   });
@@ -103,24 +103,9 @@ export function LeftSidebar() {
   };
 
   return (
-    <aside className={cn(
-      "relative border-r border-border bg-card flex-shrink-0 hidden lg:flex flex-col transition-all duration-300",
-      collapsed ? "xl:w-80 w-0 overflow-hidden border-r-0 lg:border-r lg:overflow-visible" : "w-80"
-    )}>
-      {/* Toggle Button - only on small/medium screens */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2 z-10 bg-card border border-border rounded-full p-0.5 hover:bg-secondary transition-colors xl:hidden"
-      >
-        {collapsed ? (
-          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-        ) : (
-          <ChevronLeft className="h-4 w-4 text-muted-foreground" />
-        )}
-      </button>
-
+    <aside className={cn("mt-6 space-x-8 flex-shrink-0 hidden lg:flex flex-col transition-all duration-300 w-80", "xl:w-96", "2xl:w-[400px]")}>
       {/* Search */}
-      <div className="p-3 border-b border-border relative" ref={searchRef}>
+      <div className="bg-card ml-8 mb-4 rounded-xl shadow-sm relative" ref={searchRef}>
         <div className="relative">
           <Input
             placeholder="Search for companies to invest or trade"
@@ -153,7 +138,7 @@ export function LeftSidebar() {
 
         {/* Search Overlay */}
         {searchFocused && (
-          <div className="absolute left-0 right-0 top-full z-50 bg-card border border-border rounded-b-lg shadow-lg max-h-[70vh] overflow-auto">
+          <div className="absolute top-full z-50 bg-card border border-border rounded-b-lg shadow-lg max-h-[70vh] overflow-auto">
             {/* Fast Select Filters */}
             <div className="p-3 border-b border-border">
               <div className="flex items-center gap-2 mb-3">
@@ -238,7 +223,7 @@ export function LeftSidebar() {
       </div>
 
       {/* Watchlist Header */}
-      <div className="p-3 border-b border-border relative" ref={watchlistRef}>
+      <div className="bg-card rounded-t-xl rounded-b-none border border-border shadow-sm p-3 relative" ref={watchlistRef}>
         <button
           className="flex items-center gap-2 w-full text-left"
           onClick={() => setWatchlistOpen(!watchlistOpen)}
@@ -254,10 +239,7 @@ export function LeftSidebar() {
 
         {/* Watchlist Dropdown */}
         {watchlistOpen && (
-          <div className="absolute left-0 right-0 top-full z-50 bg-card border border-border rounded-b-lg shadow-lg">
-            <div className="px-3 py-2 border-b border-border">
-              <span className="text-sm text-muted-foreground">Select Watchlist:</span>
-            </div>
+          <div className="absolute left-0 right-0 top-full z-50 bg-card border border-b-0 rounded-b-lg shadow-lg">
             <div className="max-h-[300px] overflow-auto">
               {watchlistOptions.map((option) => (
                 <button
@@ -282,60 +264,63 @@ export function LeftSidebar() {
         )}
       </div>
 
-      {/* Watchlist Tabs */}
-      <div className="p-3 border-b border-border flex gap-1">
-        {watchlistTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={cn(
-              "w-7 h-7 flex items-center justify-center rounded text-xs font-medium border transition-colors",
-              activeTab === tab
-                ? "border-success text-success bg-success/10"
-                : "border-border text-muted-foreground hover:bg-muted"
-            )}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+      <div className="bg-card border border-t-0 h-[500px]">
+        {/* Watchlist Tabs */}
+        <div className="p-3 border-b border-border flex gap-1">
+          {watchlistTabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                "w-7 h-7 flex items-center justify-center rounded text-xs font-medium border transition-colors",
+                activeTab === tab
+                  ? "border-success text-success bg-success/10"
+                  : "border-border text-muted-foreground hover:bg-muted"
+              )}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-      {/* Watchlist Items */}
-      <div className="flex-1 overflow-auto">
-        {watchlistItems.map((item) => (
-          <div
-            key={item.symbol}
-            className="px-3 py-3 border-b border-border hover:bg-muted/50 cursor-pointer transition-colors"
-            onClick={() => navigate(`/stock/${item.symbol}`)}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-sm">{item.symbol}</span>
-              <div className="text-right">
-                <p className="text-sm tabular-nums font-medium">{item.price.toLocaleString()}</p>
-                <p className={cn(
-                  "text-xs tabular-nums",
-                  item.change >= 0 ? "text-success" : "text-destructive"
-                )}>
-                  {item.change >= 0 ? '+' : ''}{item.change.toFixed(2)} ({item.changePercent.toFixed(2)}%)
-                </p>
+        {/* Watchlist Items */}
+        <div className="flex-1 overflow-auto">
+          {watchlistItems.map((item) => (
+            <div
+              key={item.symbol}
+              className="px-3 py-3 border-b border-border hover:bg-muted/50 cursor-pointer transition-colors"
+              onClick={() => navigate(`/stock/${item.symbol}`)}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col">
+                  <span className="font-medium text-sm">{item.name ?? item.symbol}</span>
+                  <span className="text-xs text-muted-foreground mt-1">{item.exchange}</span>
+                </div>
+
+                <div className="text-right">
+                  <p className={cn("text-sm tabular-nums font-medium", item.change >= 0 ? 'text-success' : 'text-destructive')}>
+                    {item.price.toLocaleString()}
+                  </p>
+                  <p className={cn(
+                    "text-xs tabular-nums flex items-center justify-end gap-1 mt-1",
+                    item.change >= 0 ? "text-success" : "text-destructive"
+                  )}>
+                    <span className="text-[10px] leading-none">{item.change >= 0 ? '▲' : '▼'}</span>
+                    <span>{Math.abs(item.change).toFixed(2)} ({Math.abs(item.changePercent).toFixed(2)}%)</span>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Bottom Controls */}
-      <div className="p-3 border-t border-border flex items-center gap-3 text-xs text-muted-foreground">
+      <div className="p-3 bg-card border border-border border-t-0 flex items-center gap-3 text-xs text-muted-foreground">
         <span>Name</span>
         <span>LTP</span>
         <span>LTP %</span>
-        <span>Color</span>
         <div className="ml-auto flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-6 w-6">
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
-            </svg>
-          </Button>
           <Button variant="ghost" size="icon" className="h-6 w-6">
             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
