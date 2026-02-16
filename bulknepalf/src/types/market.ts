@@ -1,3 +1,4 @@
+import { JSX } from "react/jsx-runtime";
 
 export interface MarketStatus {
   isOpen: boolean;
@@ -10,6 +11,14 @@ export interface PrimaryIndex {
   change: number;
   changePercent: number;
 }
+
+export interface MarketSummaryItem {
+  name: string;
+  value: number;
+}
+// MarketSummary should be an array of summary items
+// Use `MarketSummaryItem[]` where needed.
+export type MarketSummary = MarketSummaryItem[];
 
 export interface LiveTickerItem {
   name: string;
@@ -30,13 +39,87 @@ export interface LiveTicker {
   topTurnover: LiveTickerItem[];
 }
 
-
-
-export interface MarketSummaryItem {
+export interface TopStockItem {
+  index: string;
+  script: string;
   name: string;
-  value: number;
+  ltp: number;
+  change: number;
+  turnover: number;
+  tradedQty: number;
+  changePercent: number;
+  icon: string
 }
 
+export interface TopStocks {
+  topGainers: TopStockItem[];
+  topLosers: TopStockItem[];
+  topTraded: TopStockItem[];
+  topTurnover: TopStockItem[];
+}
+
+export interface IPOListItem {
+  id: number;
+  slug: string;
+  symbol: string;
+  name: string;
+  iconUrl?: string | null;
+  sector?: string | null;
+  units: number;
+  price: number;
+  priceUpto?: number | null;
+  totalAmount: number;
+  openingDate?: string | null;
+  closingDate?: string | null;
+  extendedClosingDate?: string | null;
+  bookClosureDate?: string | null;
+  resultPublishedDate?: string | null;
+  listingDate?: string | null;
+  issueManager: string;
+  remarks?: string;
+  type: 'Ipo' | 'RightShare' | 'FPO';
+  for: 'GeneralPublic' | 'Mutual' | 'Local';
+  status: 'Open' | 'ComingSoon' | 'Closed';
+  cutOffPrice?: number | null;
+  prospectus?: string | null;
+  ratingData?: any | null;
+  newsUrl?: string | null;
+  securityId?: number | null;
+  rightShareRatio?: string | null;
+}
+
+export interface IPOs {
+  items: IPOListItem[];
+}
+
+
+export interface ListedCompany {
+  symbol: string;
+  securityName: string;
+  securityId: string;
+  sector: string;
+  iconUrl: string;
+  indexId: string | null;
+  lastTradedPrice: number;
+  lastTradedVolume: number;
+  change: number;
+  percentageChange: number;
+  previousClose: number;
+  openPrice: number;
+  highPrice: number;
+  lowPrice: number;
+  totalTradeQuantity: number;
+  totalTradeValue: number;
+  totalTransactions: number;
+  lastUpdatedDateTime: string;
+}
+
+// Back-compat with the previous misspelled type name.
+export type ListdCompany = ListedCompany;
+
+
+
+// ---------------------------------------------------
 export interface StockSummary {
   advanced: number;
   declined: number;
@@ -96,29 +179,6 @@ export interface Watchlist {
   id: number;
   isPrimary: boolean;
   items: WatchlistItem[];
-}
-
-export interface IPO {
-  id: number;
-  slug: string;
-  symbol: string;
-  name: string;
-  iconUrl?: string | null;
-  sector?: string | null;
-  units: number;
-  price: number;
-  priceUpto?: number | null;
-  totalAmount: number;
-  openingDate?: string | null;
-  closingDate?: string | null;
-  extendedClosingDate?: string | null;
-  resultPublishedDate?: string | null;
-  listingDate?: string | null;
-  issueManager: string;
-  remarks?: string;
-  type: 'Ipo' | 'RightShare' | 'FPO';
-  for: 'GeneralPublic' | 'Mutual' | 'Local';
-  status: 'Open' | 'ComingSoon' | 'Closed';
 }
 
 export interface Announcement {

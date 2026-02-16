@@ -13,6 +13,7 @@ app.use(express.json());
 connectDB();
 
 app.use('/bulknepal/api/v1/nepselive/market', require('./routes/home'));
+app.use('/bulknepal/api/v1/cdsc/application', require('./routes/ipo'));
 app.use('/bulknepal/api/v1/auth', require('./routes/auth'));
 // simple health
 app.get('/', (req, res) => res.json({ success: true, message: "BulkNepal API is running.." }));
